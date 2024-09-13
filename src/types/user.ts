@@ -1,7 +1,6 @@
-/** @format */
-
 export interface IUser {
-	name: string;
-	age: number;
-	gender: 'male' | 'female';
+  id: string;
+  name: string;
+  age: number;
+  gender: "male" | "female";
 }

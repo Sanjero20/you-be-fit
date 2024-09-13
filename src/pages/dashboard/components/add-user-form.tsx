@@ -6,7 +6,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { IUser } from "@/types/user";
 
+import { v4 as uuid } from "uuid";
+
 const initialUser: IUser = {
+  id: "",
   name: "",
   age: 0,
   gender: "male",
@@ -25,7 +28,8 @@ function AddUserForm({ addUser }: AddUserFormProps) {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    addUser(values);
+    const newUser = { ...values, id: uuid() };
+    addUser(newUser);
   };
 
   return (
