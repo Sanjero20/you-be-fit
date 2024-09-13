@@ -1,12 +1,12 @@
 import { useState } from "react";
 //
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import UsersTable from "./components/users-table";
+import AddUserForm from "./components/add-user-form";
 import Modal from "@/components/common/modal";
 //
 import useModal from "@/hooks/useModal";
 import { IUser } from "@/types/user";
-import AddUserForm from "./components/add-user-form";
 
 function DashboardPage() {
   const [users, setUsers] = useState<IUser[]>([]);
@@ -24,19 +24,7 @@ function DashboardPage() {
         <Button onClick={openModal}>Add User</Button>
       </div>
 
-      <Separator />
-      {/*  */}
-      {users.length > 0 && (
-        <section>
-          {users.map((user, index) => (
-            <div key={index}>
-              <div>{user.name}</div>
-              <div>{user.age}</div>
-              <div>{user.gender}</div>
-            </div>
-          ))}
-        </section>
-      )}
+      <UsersTable users={users} />
 
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
         <AddUserForm addUser={handleAddUser} />
