@@ -4,9 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./components/layout/main-layout";
 
 // Pages
-import HomePage from "./pages/home";
-import DashboardPage from "./pages/dashboard";
-import AboutPage from "./pages/about";
+import HomePage from "@/pages/home";
+import DashboardPage from "@/pages/dashboard";
+import AssessmentPage from "@/pages/assessment";
+import AboutPage from "@/pages/about";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "/dashboard", element: <DashboardPage /> },
+      { path: "/assessment", element: <AssessmentPage /> },
       { path: "/about", element: <AboutPage /> },
     ],
   },
