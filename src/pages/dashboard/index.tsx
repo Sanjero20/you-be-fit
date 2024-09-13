@@ -1,87 +1,31 @@
-import { FormEvent, useState } from "react";
-
-// components
+import { useState } from "react";
+//
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-interface User {
-  name: string;
-  age: number;
-  gender: "male" | "female";
-}
-
-const initialUser: User = {
-  name: "",
-  age: 0,
-  gender: "male",
-};
+import Modal from "@/components/common/modal";
+//
+import useModal from "@/hooks/useModal";
+import { IUser } from "@/types/user";
+import AddUserForm from "./components/add-user-form";
 
 function DashboardPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [value, setValue] = useState<User>(initialUser);
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [isModalOpen, openModal, closeModal] = useModal();
 
-  const handleChange = (value: string | number, key: keyof User) => {
-    setValue((prevState) => ({ ...prevState, [key]: value }));
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setUsers((prevState) => [...prevState, value]);
-    setValue(initialUser);
+  const handleAddUser = (user: IUser) => {
+    setUsers((prev) => [...prev, user]);
+    closeModal();
   };
 
   return (
     <div className="">
+      <div className="flex items-center justify-between py-1">
+        <p className="text-xl font-bold">Users List</p>
+        <Button onClick={openModal}>Add User</Button>
+      </div>
+
+      <Separator />
       {/*  */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full max-w-[500px] flex-col gap-2"
-      >
-        <Label htmlFor="">
-          Name
-          <Input
-            placeholder="John Doe"
-            value={value.name}
-            onChange={(e) => handleChange(e.target.value, "name")}
-            required
-          />
-        </Label>
-
-        <Label>
-          Age
-          <Input
-            placeholder="age"
-            type="number"
-            min={0}
-            value={value.age}
-            onChange={(e) => handleChange(e.target.value, "age")}
-            required
-          />
-        </Label>
-
-        <RadioGroup
-          defaultValue={value.gender}
-          className="flex"
-          required
-          onValueChange={(e) => handleChange(e, "gender")}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="male" id="a" />
-            <Label htmlFor="a">Male</Label>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="female" id="b" />
-            <Label htmlFor="b">Female</Label>
-          </div>
-        </RadioGroup>
-
-        {/*  */}
-        <Button>Add</Button>
-      </form>
-
       {users.length > 0 && (
         <section>
           {users.map((user, index) => (
@@ -93,6 +37,10 @@ function DashboardPage() {
           ))}
         </section>
       )}
+
+      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+        <AddUserForm addUser={handleAddUser} />
+      </Modal>
     </div>
   );
 }
