@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 //
 import { Button } from "@/components/ui/button";
 import UsersTable from "./components/users-table";
-import AddUserForm from "./components/user-form";
+import UserForm from "./components/user-form";
 import Modal from "@/components/common/modal";
 //
 import useModal from "@/hooks/useModal";
@@ -12,13 +12,34 @@ import { UserService } from "@/services/users.service";
 
 function DashboardPage() {
   const [users, setUsers] = useState<IUser[]>([]);
+  const [formType, setFormType] = useState("");
   const [isModalOpen, openModal, closeModal] = useModal();
+  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+
   const userService = new UserService();
 
   const handleAddUser = (user: IUser) => {
-    userService.createUser(user);
-    setUsers((prev) => [...prev, user]);
+    const newUser = userService.createUser(user);
+    setUsers((prev) => [...prev, newUser]);
     closeModal();
+  };
+
+  const handleUpdateUser = (user: IUser) => {
+    const updatedUsers = userService.updateUser(user);
+    setUsers(updatedUsers);
+    closeModal();
+    setSelectedUser(null);
+  };
+
+  const openCreateModal = () => {
+    openModal();
+    setFormType("CREATE");
+  };
+
+  const openUpdateModal = (user: IUser) => {
+    openModal();
+    setFormType("UPDATE");
+    setSelectedUser(user);
   };
 
   useEffect(() => {
@@ -30,13 +51,16 @@ function DashboardPage() {
     <div className="">
       <div className="flex items-center justify-between py-1">
         <p className="text-xl font-bold">Users List</p>
-        <Button onClick={openModal}>Add User</Button>
+        <Button onClick={openCreateModal}>Add User</Button>
       </div>
 
-      <UsersTable users={users} />
+      <UsersTable users={users} openModal={openUpdateModal} />
 
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
-        <AddUserForm handleSubmit={handleAddUser} />
+        {formType == "CREATE" && <UserForm handleSubmit={handleAddUser} />}
+        {formType == "UPDATE" && selectedUser && (
+          <UserForm handleSubmit={handleUpdateUser} user={selectedUser} />
+        )}
       </Modal>
     </div>
   );

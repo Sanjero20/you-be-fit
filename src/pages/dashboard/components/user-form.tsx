@@ -14,11 +14,12 @@ const initialUser: IUser = {
 };
 
 interface AddUserFormProps {
+  user?: IUser;
   handleSubmit: (value: IUser) => void;
 }
 
-function UserForm({ handleSubmit }: AddUserFormProps) {
-  const [values, setValues] = useState(initialUser);
+function UserForm({ user = initialUser, handleSubmit }: AddUserFormProps) {
+  const [values, setValues] = useState(user);
 
   const handleChange = (value: string, key: keyof IUser) => {
     setValues((prev) => ({ ...prev, [key]: value }));

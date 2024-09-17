@@ -12,9 +12,10 @@ import { Trash, Edit } from "lucide-react";
 
 interface UsersTableProps {
   users: IUser[];
+  openModal: (user: IUser) => void;
 }
 
-function UsersTable({ users }: UsersTableProps) {
+function UsersTable({ users, openModal }: UsersTableProps) {
   return (
     <Table className="border">
       <TableHeader>
@@ -46,6 +47,7 @@ function UsersTable({ users }: UsersTableProps) {
                 <Button
                   variant="outline"
                   className="hover:bg-primary hover:text-white"
+                  onClick={() => openModal(user)}
                 >
                   <Edit />
                 </Button>
