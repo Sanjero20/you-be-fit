@@ -6,8 +6,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { IUser } from "@/types/user";
 
-import { v4 as uuid } from "uuid";
-
 const initialUser: IUser = {
   id: "",
   name: "",
@@ -16,10 +14,10 @@ const initialUser: IUser = {
 };
 
 interface AddUserFormProps {
-  addUser: (user: IUser) => void;
+  handleSubmit: (value: IUser) => void;
 }
 
-function AddUserForm({ addUser }: AddUserFormProps) {
+function UserForm({ handleSubmit }: AddUserFormProps) {
   const [values, setValues] = useState(initialUser);
 
   const handleChange = (value: string, key: keyof IUser) => {
@@ -28,8 +26,7 @@ function AddUserForm({ addUser }: AddUserFormProps) {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const newUser = { ...values, id: uuid() };
-    addUser(newUser);
+    handleSubmit(values);
   };
 
   return (
@@ -80,4 +77,4 @@ function AddUserForm({ addUser }: AddUserFormProps) {
   );
 }
 
-export default AddUserForm;
+export default UserForm;
