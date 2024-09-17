@@ -1,21 +1,30 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 //
 import { Button } from "@/components/ui/button";
 import UsersTable from "./components/users-table";
-import AddUserForm from "./components/add-user-form";
+import AddUserForm from "./components/user-form";
 import Modal from "@/components/common/modal";
 //
 import useModal from "@/hooks/useModal";
 import { IUser } from "@/types/user";
+import { UserService } from "@/services/users.service";
 
 function DashboardPage() {
   const [users, setUsers] = useState<IUser[]>([]);
   const [isModalOpen, openModal, closeModal] = useModal();
+  const userService = new UserService();
 
   const handleAddUser = (user: IUser) => {
+    userService.createUser(user);
     setUsers((prev) => [...prev, user]);
     closeModal();
   };
+
+  useEffect(() => {
+    const users = userService.readUser();
+    setUsers(users);
+  }, []);
 
   return (
     <div className="">
@@ -27,7 +36,7 @@ function DashboardPage() {
       <UsersTable users={users} />
 
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
-        <AddUserForm addUser={handleAddUser} />
+        <AddUserForm handleSubmit={handleAddUser} />
       </Modal>
     </div>
   );
